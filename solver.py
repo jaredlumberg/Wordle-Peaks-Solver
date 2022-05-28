@@ -3,6 +3,7 @@ import string
 import statistics
 import math
 
+# Find the optimal guess for a list of words
 def ideal_word(words):
     optimal_word = ""
 
@@ -20,13 +21,11 @@ def ideal_word(words):
                     pass
 
         letters_difference = {key: abs(letters_before[key] - letters_after.get(key, 0)) for key in letters_before.keys()}
-
-        # print(letters_difference) # DEBUG
-        # print(min(letters_difference, key=letters_difference.get)) # DEBUG
         optimal_word += min(letters_difference, key=letters_difference.get)
 
     return optimal_word
 
+# Find the closest word in the list to the optimal guess
 def closest_word(optimal_word, words):
     best_word = ""
     best_score = math.inf
@@ -43,6 +42,7 @@ def closest_word(optimal_word, words):
 
     return best_word
 
+# Remove all words from the list that can't be the solution
 def filter(input, result, words):
     new_list = []
 
@@ -64,44 +64,45 @@ def filter(input, result, words):
 
     return new_list
 
+# Solve Wordle Peaks puzzles
 def main():
-    # Add words into list
+    # Add words into list from game dictionary
     word_list = None
-
     with open("dictionary-filtered.json", "r") as read_file:
         word_list = json.load(read_file)
 
+    # Loop until an answer is found
     while True:
-        # Find the optimal word for this list
+        # If there is only one possible word, the puzzle is solved
         if len(word_list) == 1:
             print("Solved!!! Solution is " + word_list[0] + ".")
             quit()
 
+        # Find the ideal word
         ideal = ideal_word(word_list)
-        # print(ideal) # DEBUG
 
-        # Find the closest word in this list to the optimal word
+        # Find the closest word in the word list to the optimal word
         closest = closest_word(ideal, word_list)
-        # print(closest) # DEBUG
-        print("Guess the word: " + closest)
 
-        if closest == ideal:
-            print("Solved!!! Solution was " + closest + ".")
-            quit()
+        # If the closest word in the list is the idea word, the puzzle is solved
+        #if closest == ideal:
+            #print("Solved!!! Solution was " + closest + ".")
+            #quit()
 
-        # Filter out word list based on guess results
-        print("Enter results of guess:")
-        print("B = before, A = After, $ = correct")
-        result = input()
-        print("\n")
+        # Prints the word the player should guess
+        print("\n" + "Guess the word: " + closest + "\n")
 
+        # User inputs the result of the guess
+        print("KEY: B = before, A = After, $ = correct")
+        result = input("Enter results of guess: ")
+
+        # If the player guessed correctly, solving the puzzle
         if result == "$$$$$":
             print("Solved!!! Solution was " + closest + ".")
             quit()
         
+        # Filter out all words that can't be the solution   
         word_list = filter(closest, result, word_list)
-
-        # Repeat until answer is found
 
 if __name__ == "__main__":
     main()
