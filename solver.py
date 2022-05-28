@@ -84,11 +84,6 @@ def main():
         # Find the closest word in the word list to the optimal word
         closest = closest_word(ideal, word_list)
 
-        # If the closest word in the list is the idea word, the puzzle is solved
-        #if closest == ideal:
-            #print("Solved!!! Solution was " + closest + ".")
-            #quit()
-
         # Prints the word the player should guess
         print("\n" + "Guess the word: " + closest + "\n")
 
