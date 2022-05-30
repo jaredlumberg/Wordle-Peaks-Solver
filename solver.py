@@ -47,19 +47,22 @@ def filter(input, result, words):
     new_list = []
 
     for word in words:
-        wrong_letters = 0
+        valid_word = True
         for i in range(5):
             if result[i] == 'B':
                 if ord(word[i]) >= ord(input[i]):
-                    wrong_letters += 1
+                    valid_word = False
+                    break
             elif result[i] == 'A':
                 if ord(word[i]) <= ord(input[i]):
-                    wrong_letters += 1
+                    valid_word = False
+                    break
             elif result[i] == '$':
                 if ord(word[i]) != ord(input[i]):
-                    wrong_letters += 1
+                    valid_word = False
+                    break
         
-        if wrong_letters == 0:
+        if valid_word:
             new_list.append(word)
 
     return new_list
@@ -68,14 +71,14 @@ def filter(input, result, words):
 def main():
     # Add words into list from game dictionary
     word_list = None
-    with open("dictionary-filtered.json", "r") as read_file:
+    with open("targets-filtered.json", "r") as read_file:
         word_list = json.load(read_file)
 
     # Loop until an answer is found
     while True:
         # If there is only one possible word, the puzzle is solved
         if len(word_list) == 1:
-            print("Solved!!! Solution is " + word_list[0] + ".")
+            print("\n" + "Solved!!! Solution is " + word_list[0] + ".")
             quit()
 
         # Find the ideal word
@@ -93,7 +96,7 @@ def main():
 
         # If the player guessed correctly, solving the puzzle
         if result == "$$$$$":
-            print("Solved!!! Solution was " + closest + ".")
+            print("\n" + "Solved!!! Solution was " + closest + ".")
             quit()
         
         # Filter out all words that can't be the solution   
